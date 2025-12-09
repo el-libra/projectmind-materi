@@ -1,0 +1,10 @@
+{
+  "java.configuration.runtimes": [],
+  "java.import.exclusions": [
+    "**/android/**",
+    "**/build/**",
+    "**/.gradle/**"
+  ],
+  "java.maven.downloadSources": false,
+  "java.jdt.ls.androidSupport.enabled": false
+}
