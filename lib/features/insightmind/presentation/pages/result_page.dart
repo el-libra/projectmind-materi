@@ -20,11 +20,20 @@ class _ResultPageState extends ConsumerState<ResultPage> {
     if (!_saved) {
       final result =
           ref.read(resultProvider); // ambil hasil akhir (skor + risk)
-      ref
-          .read(historyRepositoryProvider)
-          .addRecord(score: result.score, riskLevel: result.riskLevel);
+      // save asynchronously and refresh history provider so UI updates
+      _saveResult(result.score, result.riskLevel);
       _saved = true;
     }
+  }
+
+  Future<void> _saveResult(int score, String riskLevel) async {
+    await ref
+        .read(historyRepositoryProvider)
+        .addRecord(score: score, riskLevel: riskLevel);
+    // refresh the history list so views watching it (Dashboard/History)
+    // will reload and display the latest record
+    // ignore: unused_local_variable
+    final refreshed = ref.refresh(historyListProvider);
   }
 
   @override

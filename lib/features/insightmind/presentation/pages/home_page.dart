@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/score_provider.dart';
 import 'screening_page.dart'; // alur Minggu 2–5
 import 'biometric_page.dart'; // alur Minggu 6–8
+import 'dashboard_page.dart'; // analitik dashboard
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -48,6 +49,19 @@ class HomePage extends ConsumerWidget {
                       );
                     },
                     child: const Text('Mulai Screening'),
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Tombol cepat: buka Dashboard Analytics
+                  FilledButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const DashboardPage()),
+                      );
+                    },
+                    child: const Text('Buka Dashboard'),
                   ),
                   const SizedBox(height: 8),
                   Text(

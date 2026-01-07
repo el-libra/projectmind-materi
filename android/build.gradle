@@ -1,3 +1,28 @@
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterRoot = localProperties.getProperty('flutter.sdk')
+if (flutterRoot == null) {
+    throw new org.gradle.api.GradleException('Flutter SDK not found. Define location with flutter.sdk in the local.properties file.')
+}
+
+buildscript {
+    ext.kotlin_version = '2.1.10'
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.1.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
 allprojects {
     repositories {
         google()
@@ -6,10 +31,21 @@ allprojects {
 }
 
 rootProject.buildDir = "../build"
+
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
+
+    // Make flutter properties available to all subprojects (required by plugins like sensors_plus)
+    ext.flutter = [
+        compileSdkVersion: 35,
+        minSdkVersion: 21,
+        targetSdkVersion: 35,
+        ndkVersion: '27.0.12077973',
+        versionCode: 1,
+        versionName: '1.0'
+    ]
+
+    // Ensure app module is evaluated after root so plugins can rely on `flutter` ext
     project.evaluationDependsOn(":app")
 }
 

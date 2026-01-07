@@ -6,5 +6,6 @@
     "**/.gradle/**"
   ],
   "java.maven.downloadSources": false,
-  "java.jdt.ls.androidSupport.enabled": false
+  "java.jdt.ls.androidSupport.enabled": false,
+  "java.configuration.updateBuildConfiguration": "automatic"
 }
