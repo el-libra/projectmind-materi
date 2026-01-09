@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../providers/history_providers.dart';
+import '../providers/report_provider.dart';
 
 // Lightweight sparkline card
 // Widget ini menampilkan rangkuman skor terakhir dengan sparkline yang
@@ -451,16 +452,44 @@ class DashboardPage extends ConsumerWidget {
                           Expanded(
                             child: FilledButton(
                               onPressed: () {
-                                // Example action: buka halaman histori
                                 Navigator.pushNamed(context, '/history');
                               },
                               child: const Text('Lihat Histori'),
                             ),
                           ),
                           const SizedBox(width: 12),
-                          OutlinedButton(
+                          FilledButton.icon(
+                            icon: const Icon(Icons.picture_as_pdf),
+                            label: const Text('PDF'),
+                            onPressed: () async {
+                              final generator =
+                                  ref.read(reportGeneratorProvider);
+                              final previewer = ref.read(reportPreviewProvider);
+
+                              final history = records.map((r) {
+                                return {
+                                  'tanggal':
+                                      r.timestamp.toString().substring(0, 10),
+                                  'score': r.score,
+                                  'riskLevel': r.riskLevel,
+                                };
+                              }).toList();
+
+                              final pdfBytes = await generator.generateReport(
+                                username: 'User InsightMind',
+                                history: history,
+                              );
+
+                              await previewer.previewPdf(
+                                onLayout: (_) async => pdfBytes,
+                              );
+                            },
+                          ),
+                          const SizedBox(width: 8),
+                          OutlinedButton.icon(
+                            icon: const Icon(Icons.share),
+                            label: const Text('Bagikan'),
                             onPressed: () {},
-                            child: const Text('Bagikan Insight'),
                           ),
                         ],
                       ),
@@ -468,6 +497,8 @@ class DashboardPage extends ConsumerWidget {
                   ),
                 ),
               ),
+
+              const SizedBox(height: 24),
             ],
           );
         },

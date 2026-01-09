@@ -14,7 +14,7 @@ if (flutterRoot == null) {
 // Configure Flutter before applying plugin
 ext.flutter = [
     compileSdkVersion: 35,
-    minSdkVersion: 21,
+    minSdkVersion: 23,
     targetSdkVersion: 35,
     ndkVersion: '27.0.12077973',
     versionCode: 1,
